@@ -1,0 +1,54 @@
+﻿@*
+    Namespace: System.Web.Mvc
+    Generator: MvcHelper
+*@
+@using System.Web.Mvc
+@helper BeginUpdatePanel(UpdatePanelScope updatePanel)
+{
+var elementId = updatePanel.Data().AddOrGetExisting("ElementId", ()=>Guid.NewGuid().ToString("N"));
+var id = updatePanel.Id();
+@:  <div class="updatePanel" id="@elementId" data-updatePanel="@id">
+        <div class="updatePanel-loading" data-updatePanel="@id">
+            @if (updatePanel.Settings.RenderLoadingDiv != null)
+            {
+                @updatePanel.Settings.RenderLoadingDiv(updatePanel);
+            }
+            else
+            {
+                @:Loading...please wait
+            }
+        </div>
+        @:<div class="updatePanel-content" data-updatePanel="@id">
+}
+@helper EndUpdatePanel(UpdatePanelScope updatePanel)
+{
+    var elementId = updatePanel.Data()["ElementId"] as string;
+    var id = updatePanel.Id();
+
+
+@:        </div>
+        <script>
+                (function()
+                {
+                    //DisableLinePragmas: true
+                    var id = @J(id);
+                    var elementId = @J(elementId);
+                    var callbackUrl = @J(updatePanel.GetCallbackUrl());
+                    var settings = @J(updatePanel.Settings);
+                    settings.elementId = elementId;
+                    var panel = UpdatePanels.CreateUpdatePanel(id, callbackUrl, settings);
+                    @if (!string.IsNullOrEmpty(updatePanel.Settings.JSInit))
+                    {
+                        @:(@(updatePanel.Settings.JSInit))(panel);
+                    }
+                })();
+        </script>
+@:    </div>
+}
+
+@functions{
+    public static IHtmlString J(object value)
+    {
+        return new HtmlString(Json.Encode(value));
+    }
+}

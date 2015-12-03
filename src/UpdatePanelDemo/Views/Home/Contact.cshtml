@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Contact";
+    //Layout = null;
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+<script>
+    function ReqClick() {
+        var startTime = Date();
+
+        $.ajax("./Sleep")
+        .success(function () {
+            var log = $("#log");
+            var endTime = Date();
+            log.text(log.text() + "Start: " + startTime.toString() + "  === " + endTime.toString());
+        });
+    };
+</script>
+
+<button type="button" onclick="ReqClick();">
+    Request
+</button>
+<textarea id="log">
+
+</textarea>

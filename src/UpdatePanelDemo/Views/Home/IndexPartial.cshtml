@@ -1,0 +1,59 @@
+﻿@using System.Linq;
+@using System.Linq.Expressions;
+@{
+    //PARTIAL
+    var isSubAction = this.ViewContext.ParentActionViewContext != null;
+    ViewData["IndexPartial.ViewData"] = ViewData;
+    ViewContext.ViewData["IndexPartial.ViewContext"] = ViewContext;
+    ViewContext.ViewData["IndexPartial.ViewContext.ViewData"] = ViewContext.ViewData;
+
+    TempData["IndexPartial.TempData"] = TempData;
+    ViewContext.TempData["IndexPartial.ViewContext"] = ViewContext;
+    ViewContext.TempData["IndexPartial.ViewContext.TempData"] = ViewContext.TempData;
+
+    PageData["IndexPartial.PageData"] = PageData;
+
+
+}
+<div style="margin:10px">
+    <b>
+        @if (isSubAction)
+        {
+            @:Html.Action:SubAction
+        }
+        else
+        {
+            @:Html.Partial
+        }
+        <span>IndexPartial.cshtml</span>
+    </b>
+    @*@Utils.ContextInfo(this)*@
+
+
+    @using (var up = Ajax.BeginUpdatePanel(p => { }))
+    {
+        if (up.ShouldExecute())
+        {
+            System.Threading.Thread.Sleep(3000);
+            <div style="margin:10px">
+                Content: @up.Id()
+                <br />
+                Thread: @System.Threading.Thread.CurrentThread.ManagedThreadId
+            </div>
+        }
+    }
+
+    @using (var up = Ajax.BeginUpdatePanel())
+    {
+        if (up.ShouldExecute())
+        {
+            System.Threading.Thread.Sleep(3000);
+            <div style="margin:10px">
+                Content: @up.Id()
+                <br />
+                Thread: @System.Threading.Thread.CurrentThread.ManagedThreadId
+            </div>
+
+        }
+    }
+</div>
